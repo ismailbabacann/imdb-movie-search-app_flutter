@@ -31,7 +31,8 @@ class _MainpageState extends State<Mainpage> {
 
       for (var movie in searchResults) {
         final movieDetailsResponse = await http.get(
-          Uri.parse('http://www.omdbapi.com/?i=${movie['imdbID']}&apikey=770267f9'),
+          Uri.parse(
+              'http://www.omdbapi.com/?i=${movie['imdbID']}&apikey=770267f9'),
         );
 
         if (movieDetailsResponse.statusCode == 200) {
@@ -83,13 +84,22 @@ class _MainpageState extends State<Mainpage> {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: [
-                    RatingCard(),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    RatingCard(),
-                  ],
+                  children: movies.map((mov) {
+                    if ((double.tryParse(mov["imdbRating"]) ?? 0.0) > 6.9) {
+                      return Row(
+                        children: [
+                          RatingCard(
+                            title: mov["Title"],
+                            rating: mov["imdbRating"],
+                            posterUrl: mov["Poster"],
+                          ),
+                          SizedBox(width: 20),
+                        ],
+                      );
+                    } else {
+                      return SizedBox.shrink();
+                    }
+                  }).toList(),
                 ),
               ),
               SizedBox(
