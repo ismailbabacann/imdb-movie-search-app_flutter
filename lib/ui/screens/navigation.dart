@@ -50,7 +50,6 @@ class _NavigationState extends State<Navigation> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-
               Icons.bookmark,
               color: selectedIndex == 2 ? Colors.amber : Colors.white,
               size: selectedIndex == 2 ? 35 : 30,

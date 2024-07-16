@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
 class Movieinfocard extends StatefulWidget {
-  const Movieinfocard({super.key});
+  const Movieinfocard({Key? key}) : super(key: key);
 
   @override
   State<Movieinfocard> createState() => _MovieinfocardState();
 }
 
 class _MovieinfocardState extends State<Movieinfocard> {
+  bool isBookmarked = false;
+
   @override
   Widget build(BuildContext context) {
     double deviceHeight = MediaQuery.of(context).size.height;
@@ -15,13 +17,34 @@ class _MovieinfocardState extends State<Movieinfocard> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          width: deviceWidth / 2.2,
-          height: deviceHeight / 2.8,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Colors.grey,
-          ),
+        Stack(
+          children: [
+            Container(
+              width: deviceWidth / 2.2,
+              height: deviceHeight / 2.8,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.grey,
+              ),
+              child: Placeholder(), // Buraya istediğiniz film posterini ekleyebilirsiniz
+            ),
+            Positioned(
+              top: 8,
+              right: 8,
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isBookmarked = !isBookmarked;
+                  });
+                },
+                child: Icon(
+                  Icons.bookmark,
+                  color: isBookmarked ? Colors.amber : Colors.black,
+                  size: 45,
+                ),
+              ),
+            ),
+          ],
         ),
         SizedBox(
           width: 20,
@@ -30,11 +53,14 @@ class _MovieinfocardState extends State<Movieinfocard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Hitman's Wife's Bodyguard",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold)),
+              Text(
+                "Hitman's Wife's Bodyguard",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               SizedBox(
                 height: 10,
               ),
@@ -60,7 +86,7 @@ class _MovieinfocardState extends State<Movieinfocard> {
                 height: 10,
               ),
               Text(
-                "Action,Comedy,Crime",
+                "Action, Comedy, Crime",
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.white,
