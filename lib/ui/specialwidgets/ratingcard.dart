@@ -2,16 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class RatingCard extends StatelessWidget {
-  final String title;
-  final String rating;
-  final String posterUrl;
-
-  const RatingCard(
-      {super.key,
-      required this.title,
-      required this.rating,
-      required this.posterUrl});
-
   @override
   Widget build(BuildContext context) {
     double deviceHeight = MediaQuery.of(context).size.height;
@@ -25,22 +15,17 @@ class RatingCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  width: deviceWidth / (1.18),
-                  height: deviceHeight / 4,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.grey,
-                    image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: NetworkImage(posterUrl)),
-
-
-                  ),
+                  width: deviceWidth/(1.18),
+                  height: deviceHeight/4,
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(20),
+                        color: Colors.grey,
+                      ),
                   // Buraya image ekleyebilirsiniz
                 ),
                 SizedBox(height: 8),
                 Text(
-                  title,
+                  "Hitman's Wife's Bodyguard",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 24,
@@ -51,7 +36,7 @@ class RatingCard extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      rating,
+                      '3.5',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 24,
