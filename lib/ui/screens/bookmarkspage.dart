@@ -14,7 +14,10 @@ class _BookmarkspageState extends State<Bookmarkspage> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        leading: Icon(Icons.arrow_back , ),
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 30),
+          child: Icon(Icons.bookmark,),
+        ),
         iconTheme: IconThemeData(color: Colors.amber , size: 40),
         backgroundColor: Colors.black,
         title: RichText(
