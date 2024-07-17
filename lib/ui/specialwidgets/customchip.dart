@@ -1,31 +1,40 @@
 import 'package:flutter/material.dart';
 
-class Customchip extends StatelessWidget {
-  const Customchip({super.key});
+class CustomChip extends StatelessWidget {
+  final List<String> categories;
+  final Function(String) onCategorySelected;
+  final String selectedCategory;
+
+  CustomChip({required this.categories, required this.onCategorySelected, required this.selectedCategory});
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          Chip(label: Text("ALL" , style: TextStyle(color: Colors.white),)
-            , backgroundColor: Colors.black87, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)), side: BorderSide(color: Colors.black),),
-          SizedBox(width: 10,),
-          Chip(label: Text("ANIMATION" , style: TextStyle(color: Colors.white),)
-            , backgroundColor: Colors.black87, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)), side: BorderSide(color: Colors.black),),
-          SizedBox(width: 10,),
-          Chip(label: Text("ACTION" , style: TextStyle(color: Colors.white),)
-            , backgroundColor: Colors.black87, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)), side: BorderSide(color: Colors.black),),
-          SizedBox(width: 10,),
-          Chip(label: Text("COMEDY" , style: TextStyle(color: Colors.white),)
-            , backgroundColor: Colors.black87, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)), side: BorderSide(color: Colors.black),),
-          SizedBox(width: 10,),
-          Chip(label: Text("DRAMA" , style: TextStyle(color: Colors.white),)
-            , backgroundColor: Colors.black87, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)), side: BorderSide(color: Colors.black),),
-          SizedBox(width: 10,),
-          ],
-      ),
+    return Wrap(
+      spacing: 8.0,
+      children: categories.map((category) {
+        return ChoiceChip(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          label: Text(
+            category,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: selectedCategory == category ? Colors.black : Colors.white,
+            ),
+          ),
+          selected: selectedCategory == category,
+          onSelected: (bool selected) {
+            onCategorySelected(category);
+          },
+          selectedColor: Colors.amber,
+          backgroundColor: Colors.grey[850],
+          elevation: 3,
+          side: BorderSide.none,
+          padding: EdgeInsets.symmetric(horizontal: 10),
+        );
+      }).toList(),
     );
   }
 }

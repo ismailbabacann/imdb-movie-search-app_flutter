@@ -95,7 +95,6 @@ class _SearchpageState extends State<Searchpage> {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 15),
-              child: Customchip(),
             ),
             SizedBox(
               height: 10,
