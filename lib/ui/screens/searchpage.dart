@@ -3,9 +3,10 @@ import 'package:moviesearchapp/ui/specialwidgets/customchip.dart';
 import 'package:moviesearchapp/ui/specialwidgets/movieinfocard.dart';
 
 class Searchpage extends StatefulWidget {
-
   final List movies;
-  const Searchpage({super.key, required this.movies});
+  final List bookmarkedMovies;
+
+  const Searchpage({super.key, required this.movies, required this.bookmarkedMovies});
 
   @override
   State<Searchpage> createState() => _SearchpageState();
@@ -116,6 +117,7 @@ class _SearchpageState extends State<Searchpage> {
               padding: const EdgeInsets.only(left: 20),
               child: Column(
                 children: widget.movies.map((movie) {
+                  bool isBookmarked = widget.bookmarkedMovies.contains(movie);
                   return Column(
                     children: [
                       Movieinfocard(
@@ -124,6 +126,7 @@ class _SearchpageState extends State<Searchpage> {
                         genres: movie['Genre'],
                         plot: movie['Plot'],
                         posterUrl: movie['Poster'],
+                        icon: isBookmarked ? Icons.bookmark : Icons.bookmark_outline,
                       ),
                       SizedBox(
                         height: 30,

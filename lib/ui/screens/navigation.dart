@@ -4,7 +4,6 @@ import 'package:moviesearchapp/ui/screens/bookmarkspage.dart';
 import 'package:moviesearchapp/ui/screens/searchpage.dart';
 import 'package:moviesearchapp/data/apiconnection.dart';
 
-
 class Navigation extends StatefulWidget {
   const Navigation({super.key});
 
@@ -15,6 +14,7 @@ class Navigation extends StatefulWidget {
 class _NavigationState extends State<Navigation> {
   int selectedIndex = 0;
   List movies = [];
+  List bookmarkedMovies = []; // Added bookmarkedMovies list
   bool isLoading = true;
 
   @override
@@ -34,9 +34,9 @@ class _NavigationState extends State<Navigation> {
   @override
   Widget build(BuildContext context) {
     List<Widget> pages = [
-      Mainpage(movies: movies),
-      Searchpage(movies: []),
-      Bookmarkspage(movies: movies),
+      Mainpage(movies: movies, bookmarkedMovies: bookmarkedMovies), // Pass bookmarkedMovies
+      Searchpage(movies: movies, bookmarkedMovies: bookmarkedMovies),
+      Bookmarkspage(bookmarkedMovies: bookmarkedMovies), // Pass bookmarkedMovies
     ];
 
     return Scaffold(

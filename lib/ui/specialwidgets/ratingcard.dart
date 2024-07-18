@@ -4,12 +4,13 @@ class RatingCard extends StatefulWidget {
   final String title;
   final String rating;
   final String posterUrl;
+  final IconData icon;
 
   RatingCard({
     Key? key,
     required this.title,
     required this.rating,
-    required this.posterUrl,
+    required this.posterUrl, required this.icon,
   }) : super(key: key);
 
   @override

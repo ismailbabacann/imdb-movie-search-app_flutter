@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 class Movieinfocard extends StatefulWidget {
-  const Movieinfocard({Key? key, required this.title, required this.rating, required this.genres, required this.plot, required this.posterUrl}) : super(key: key);
+  const Movieinfocard({Key? key, required this.title, required this.rating, required this.genres, required this.plot, required this.posterUrl, required this.icon}) : super(key: key);
 
   final String title;
   final String rating;
   final String genres;
   final String plot;
   final String posterUrl;
+  final IconData icon;
 
   @override
   State<Movieinfocard> createState() => _MovieinfocardState();
