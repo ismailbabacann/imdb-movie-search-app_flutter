@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:moviesearchapp/ui/screens/mainpage.dart';
 import 'package:moviesearchapp/ui/screens/bookmarkspage.dart';
 import 'package:moviesearchapp/ui/screens/searchpage.dart';
+import 'package:moviesearchapp/data/apiconnection.dart';
+
 
 class Navigation extends StatefulWidget {
   const Navigation({super.key});
@@ -12,17 +14,36 @@ class Navigation extends StatefulWidget {
 
 class _NavigationState extends State<Navigation> {
   int selectedIndex = 0;
+  List movies = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchMovies();
+  }
+
+  Future<void> fetchMovies() async {
+    List fetchedMovies = await fetchLatestMovies();
+    setState(() {
+      movies = fetchedMovies;
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     List<Widget> pages = [
-      Mainpage(),
-      Searchpage(),
-      Bookmarkspage(),
+      Mainpage(movies: movies),
+      Searchpage(movies: []),
+      Bookmarkspage(movies: movies),
     ];
+
     return Scaffold(
       backgroundColor: Colors.black,
-      body: pages[selectedIndex],
+      body: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : pages[selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.black,
         currentIndex: selectedIndex,

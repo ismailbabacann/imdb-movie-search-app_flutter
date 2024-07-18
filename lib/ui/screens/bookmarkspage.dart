@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:moviesearchapp/ui/specialwidgets/movieinfocard.dart';
 
 class Bookmarkspage extends StatefulWidget {
-  const Bookmarkspage({super.key});
+
+  final List movies;
+
+  const Bookmarkspage({super.key, required this.movies});
 
   @override
   State<Bookmarkspage> createState() => _BookmarkspageState();
@@ -35,21 +38,27 @@ class _BookmarkspageState extends State<Bookmarkspage> {
           ),
         ),
       ),
-      body: const SingleChildScrollView(
+      body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(
           padding: EdgeInsets.only(left: 20),
           child: Column(
-            children: [
-              SizedBox(height: 20,),
-              Movieinfocard(),
-              SizedBox(height: 20,),
-              Movieinfocard(),
-              SizedBox(height: 20,),
-              Movieinfocard(),
-              SizedBox(height: 20,),
-              Movieinfocard(),
-            ],
+            children: widget.movies.map((movie) {
+              return Column(
+                children: [
+                  Movieinfocard(
+                    title: movie['Title'],
+                    rating: movie['imdbRating'],
+                    genres: movie['Genre'],
+                    plot: movie['Plot'],
+                    posterUrl: movie['Poster'],
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                ],
+              );
+            }).toList(),
           ),
         ),
       ),

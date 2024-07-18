@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 
 class Movieinfocard extends StatefulWidget {
-  const Movieinfocard({Key? key}) : super(key: key);
+  const Movieinfocard({Key? key, required this.title, required this.rating, required this.genres, required this.plot, required this.posterUrl}) : super(key: key);
+
+  final String title;
+  final String rating;
+  final String genres;
+  final String plot;
+  final String posterUrl;
 
   @override
   State<Movieinfocard> createState() => _MovieinfocardState();
@@ -25,8 +31,11 @@ class _MovieinfocardState extends State<Movieinfocard> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 color: Colors.grey,
+                image: DecorationImage(
+                  image: NetworkImage(widget.posterUrl),
+                  fit: BoxFit.cover,
+                ),
               ),
-              child: Placeholder(), // Buraya istediğiniz film posterini ekleyebilirsiniz
             ),
             Positioned(
               top: 8,
@@ -53,13 +62,29 @@ class _MovieinfocardState extends State<Movieinfocard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text(widget.title,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold)),
+              SizedBox(
+                height: 10,
+              ),
+              Text(widget.genres,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  )),
+              SizedBox(
+                height: 10,
+              ),
               Text(
-                "Hitman's Wife's Bodyguard",
+                widget.plot,
                 style: TextStyle(
+                  fontSize: 16,
                   color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
                 ),
+                textAlign: TextAlign.start,
               ),
               SizedBox(
                 height: 10,
@@ -67,7 +92,7 @@ class _MovieinfocardState extends State<Movieinfocard> {
               Row(
                 children: [
                   Text(
-                    '3.5',
+                    widget.rating,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 24,
@@ -75,23 +100,15 @@ class _MovieinfocardState extends State<Movieinfocard> {
                     ),
                   ),
                   SizedBox(width: 4),
-                  Icon(Icons.star, color: Colors.amber, size: 24),
-                  Icon(Icons.star, color: Colors.amber, size: 24),
-                  Icon(Icons.star, color: Colors.amber, size: 24),
-                  Icon(Icons.star_half, color: Colors.amber, size: 24),
-                  Icon(Icons.star_border, color: Colors.amber, size: 24),
+                  ...List.generate(5, (index) {
+                    double starRating = double.tryParse(widget.rating) ?? 0.0;
+                    return Icon(
+                      index < starRating / 2 ? Icons.star : Icons.star_border,
+                      color: Colors.amber,
+                      size: 24,
+                    );
+                  }),
                 ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                "Action, Comedy, Crime",
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                ),
-                textAlign: TextAlign.start,
               ),
             ],
           ),

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:moviesearchapp/ui/screens/discover.dart';
 import 'package:moviesearchapp/ui/specialwidgets/movieinfocard.dart';
 import 'package:moviesearchapp/ui/specialwidgets/ratingcard.dart';
-import 'package:moviesearchapp/ui/screens/bookmarkspage.dart';
-import 'package:moviesearchapp/ui/screens/searchpage.dart';
 
 class Mainpage extends StatefulWidget {
-  Mainpage({super.key});
+  final List movies;
+
+  Mainpage({super.key, required this.movies});
 
   @override
   State<Mainpage> createState() => _MainpageState();
@@ -15,8 +15,8 @@ class Mainpage extends StatefulWidget {
 class _MainpageState extends State<Mainpage> {
   @override
   Widget build(BuildContext context) {
-    double deviceHeight = MediaQuery.of(context).size.height;
-    double deviceWidth = MediaQuery.of(context).size.width;
+    //double deviceHeight = MediaQuery.of(context).size.height;
+    //double deviceWidth = MediaQuery.of(context).size.width;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(30, 40, 0, 0),
@@ -48,11 +48,22 @@ class _MainpageState extends State<Mainpage> {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: [
-                    RatingCard(),
-                    SizedBox(width: 20),
-                    RatingCard(),
-                  ],
+                  children: widget.movies.map((mov) {
+                    if ((double.tryParse(mov["imdbRating"]) ?? 0.0) > 6.9) {
+                      return Row(
+                        children: [
+                          RatingCard(
+                            title: mov["Title"],
+                            rating: mov["imdbRating"],
+                            posterUrl: mov["Poster"],
+                          ),
+                          SizedBox(width: 20),
+                        ],
+                      );
+                    } else {
+                      return SizedBox.shrink();
+                    }
+                  }).toList(),
                 ),
               ),
               SizedBox(height: 30),
@@ -92,9 +103,24 @@ class _MainpageState extends State<Mainpage> {
                 ],
               ),
               SizedBox(height: 30),
-              Movieinfocard(),
-              SizedBox(height: 30),
-              Movieinfocard(),
+              Column(
+                children: widget.movies.map((movie) {
+                  return Column(
+                    children: [
+                      Movieinfocard(
+                        title: movie['Title'],
+                        rating: movie['imdbRating'],
+                        genres: movie['Genre'],
+                        plot: movie['Plot'],
+                        posterUrl: movie['Poster'],
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                    ],
+                  );
+                }).toList(),
+              ),
             ],
           ),
         ),
