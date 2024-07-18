@@ -6,17 +6,49 @@ import 'package:moviesearchapp/ui/specialwidgets/ratingcard.dart';
 class Mainpage extends StatefulWidget {
   final List movies;
 
-  Mainpage({super.key, required this.movies});
+  Mainpage({Key? key, required this.movies}) : super(key: key);
 
   @override
   State<Mainpage> createState() => _MainpageState();
 }
 
 class _MainpageState extends State<Mainpage> {
+  List bestMovies = [];
+  List newestMovies = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchBestMovies();
+    _fetchNewestMovies();
+  }
+
+  void _fetchBestMovies() {
+    // Sort movies by imdbRating in descending order
+    widget.movies.sort((a, b) {
+      double ratingA = double.tryParse(a["imdbRating"]) ?? 0.0;
+      double ratingB = double.tryParse(b["imdbRating"]) ?? 0.0;
+      return ratingB.compareTo(ratingA); // Descending order
+    });
+
+    // Take the top 5 movies
+    bestMovies = widget.movies.take(5).toList();
+  }
+
+  void _fetchNewestMovies() {
+    // Sort movies by year in descending order
+    widget.movies.sort((a, b) {
+      int yearA = int.tryParse(a["Year"]) ?? 0;
+      int yearB = int.tryParse(b["Year"]) ?? 0;
+      return yearB.compareTo(yearA); // Descending order by year
+    });
+    newestMovies = widget.movies.take(20).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
-    //double deviceHeight = MediaQuery.of(context).size.height;
-    //double deviceWidth = MediaQuery.of(context).size.width;
+    _fetchBestMovies(); // Ensure best movies are fetched
+    _fetchNewestMovies(); // Ensure newest movies are fetched
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(30, 40, 0, 0),
@@ -48,21 +80,17 @@ class _MainpageState extends State<Mainpage> {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: widget.movies.map((mov) {
-                    if ((double.tryParse(mov["imdbRating"]) ?? 0.0) > 6.9) {
-                      return Row(
-                        children: [
-                          RatingCard(
-                            title: mov["Title"],
-                            rating: mov["imdbRating"],
-                            posterUrl: mov["Poster"],
-                          ),
-                          SizedBox(width: 20),
-                        ],
-                      );
-                    } else {
-                      return SizedBox.shrink();
-                    }
+                  children: bestMovies.map((mov) {
+                    return Row(
+                      children: [
+                        RatingCard(
+                          title: mov["Title"],
+                          rating: mov["imdbRating"],
+                          posterUrl: mov["Poster"],
+                        ),
+                        SizedBox(width: 20),
+                      ],
+                    );
                   }).toList(),
                 ),
               ),
@@ -104,7 +132,7 @@ class _MainpageState extends State<Mainpage> {
               ),
               SizedBox(height: 30),
               Column(
-                children: widget.movies.map((movie) {
+                children: newestMovies.map((movie) {
                   return Column(
                     children: [
                       Movieinfocard(

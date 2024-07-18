@@ -47,8 +47,8 @@ class _MovieinfocardState extends State<Movieinfocard> {
                   });
                 },
                 child: Icon(
-                  Icons.bookmark,
-                  color: isBookmarked ? Colors.amber : Colors.black,
+                  isBookmarked ? Icons.bookmark : Icons.bookmark_outline_rounded,
+                  color: isBookmarked ? Colors.amber : Colors.white,
                   size: 45,
                 ),
               ),
@@ -67,25 +67,6 @@ class _MovieinfocardState extends State<Movieinfocard> {
                       color: Colors.white,
                       fontSize: 24,
                       fontWeight: FontWeight.bold)),
-              SizedBox(
-                height: 10,
-              ),
-              Text(widget.genres,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                  )),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                widget.plot,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                ),
-                textAlign: TextAlign.start,
-              ),
               SizedBox(
                 height: 10,
               ),
@@ -110,6 +91,29 @@ class _MovieinfocardState extends State<Movieinfocard> {
                   }),
                 ],
               ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(widget.genres,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  )),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                widget.plot,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey,
+                ),
+                textAlign: TextAlign.start,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+
             ],
           ),
         )

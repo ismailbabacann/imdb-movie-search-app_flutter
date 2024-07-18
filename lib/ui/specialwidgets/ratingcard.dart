@@ -1,74 +1,102 @@
 import 'package:flutter/material.dart';
 
-class RatingCard extends StatelessWidget {
+class RatingCard extends StatefulWidget {
   final String title;
   final String rating;
   final String posterUrl;
 
-  const RatingCard(
-      {super.key,
-        required this.title,
-        required this.rating,
-        required this.posterUrl});
+  RatingCard({
+    Key? key,
+    required this.title,
+    required this.rating,
+    required this.posterUrl,
+  }) : super(key: key);
+
+  @override
+  _RatingCardState createState() => _RatingCardState();
+}
+
+class _RatingCardState extends State<RatingCard> {
+  bool isBookmarked = false;
 
   @override
   Widget build(BuildContext context) {
     double deviceHeight = MediaQuery.of(context).size.height;
     double deviceWidth = MediaQuery.of(context).size.width;
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          Container(
-            width: deviceWidth / 1.18,
-            height: deviceHeight / 3, // Görselin boyutunu uygun hale getirdim
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: Colors.grey,
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: NetworkImage(posterUrl),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Stack(
+          children: [
+            Container(
+              width: deviceWidth / 1.18,
+              height: deviceHeight / 3.8,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.grey,
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: NetworkImage(widget.posterUrl),
+                ),
               ),
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 4),
-                  Row(
-                    children: [
-                      Text(
-                        rating,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(width: 4),
-                      Icon(Icons.star, color: Colors.amber, size: 24),
-                      Icon(Icons.star, color: Colors.amber, size: 24),
-                      Icon(Icons.star, color: Colors.amber, size: 24),
-                      Icon(Icons.star_half, color: Colors.amber, size: 24),
-                      Icon(Icons.star_border, color: Colors.amber, size: 24),
-                    ],
-                  ),
-                ],
+            Positioned(
+              top: 8,
+              right: 8,
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isBookmarked = !isBookmarked;
+                  });
+                },
+                child: Icon(
+                  isBookmarked ? Icons.bookmark : Icons.bookmark_outline_rounded,
+                  color: isBookmarked ? Colors.amber : Colors.white,
+                  size: 45,
+                ),
               ),
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
+        SizedBox(height: 4), // Resim ve rating arasında boşluk
+        Column(
+          children: [
+            SizedBox(height: 8),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Text(
+                widget.title,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Text(
+              widget.rating,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(width: 4),
+            ...List.generate(5, (index) {
+              double starRating = double.tryParse(widget.rating) ?? 0.0;
+              return Icon(
+                index < starRating / 2 ? Icons.star : Icons.star_border,
+                color: Colors.amber,
+                size: 24,
+              );
+            }),
+          ],
+        ),
+      ],
     );
   }
 }
