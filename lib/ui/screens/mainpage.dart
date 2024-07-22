@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:moviesearchapp/ui/screens/discover.dart';
 import 'package:moviesearchapp/ui/specialwidgets/movieinfocard.dart';
 import 'package:moviesearchapp/ui/specialwidgets/ratingcard.dart';
+import 'package:moviesearchapp/ui/screens/moviedetailspage.dart'; // Import the Movie Details Page
 
 class Mainpage extends StatefulWidget {
   final List movies;
@@ -47,9 +48,6 @@ class _MainpageState extends State<Mainpage> {
 
   @override
   Widget build(BuildContext context) {
-    _fetchBestMovies(); // Ensure best movies are fetched
-    _fetchNewestMovies(); // Ensure newest movies are fetched
-
     return Padding(
       padding: const EdgeInsets.fromLTRB(30, 40, 0, 0),
       child: Scaffold(
@@ -58,7 +56,7 @@ class _MainpageState extends State<Mainpage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // TOP FİVE YAZISI
+              // TOP FIVE
               RichText(
                 text: const TextSpan(
                   text: "Top Five",
@@ -95,7 +93,7 @@ class _MainpageState extends State<Mainpage> {
                 ),
               ),
               SizedBox(height: 30),
-              // LATEST SATIRI
+              // LATEST
               Row(
                 children: [
                   RichText(
@@ -141,10 +139,22 @@ class _MainpageState extends State<Mainpage> {
                         genres: movie['Genre'],
                         plot: movie['Plot'],
                         posterUrl: movie['Poster'],
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Moviedetailspage(
+                                title: movie['Title'],
+                                rating: movie['imdbRating'],
+                                genres: movie['Genre'],
+                                plot: movie['Plot'],
+                                posterUrl: movie['Poster'],
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                      SizedBox(
-                        height: 30,
-                      ),
+                      SizedBox(height: 30),
                     ],
                   );
                 }).toList(),

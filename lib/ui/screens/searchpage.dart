@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moviesearchapp/ui/screens/moviedetailspage.dart';
 import 'package:moviesearchapp/ui/specialwidgets/customchip.dart';
 import 'package:moviesearchapp/ui/specialwidgets/movieinfocard.dart';
 
@@ -124,6 +125,21 @@ class _SearchpageState extends State<Searchpage> {
                         genres: movie['Genre'],
                         plot: movie['Plot'],
                         posterUrl: movie['Poster'],
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Moviedetailspage(
+                                title: movie['Title'],
+                                rating: movie['imdbRating'],
+                                genres: movie['Genre'],
+                                plot: movie['Plot'],
+                                posterUrl: movie['Poster'],
+                              ),
+                            ),
+                          );
+                        },
+
                       ),
                       SizedBox(
                         height: 30,

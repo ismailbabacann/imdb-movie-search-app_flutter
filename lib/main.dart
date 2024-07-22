@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moviesearchapp/ui/screens/moviedetailspage.dart';
 import 'package:moviesearchapp/ui/screens/navigation.dart';
 
 void main() {
