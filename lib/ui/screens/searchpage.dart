@@ -130,6 +130,7 @@ class _SearchpageState extends State<Searchpage> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => Moviedetailspage(
+                                id: movie['id'],
                                 title: movie['Title'],
                                 rating: movie['imdbRating'],
                                 genres: movie['Genre'],

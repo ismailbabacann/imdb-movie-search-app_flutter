@@ -58,6 +58,7 @@ class _BookmarkspageState extends State<Bookmarkspage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => Moviedetailspage(
+                            id: movie['imdbID'],
                             title: movie['Title'],
                             rating: movie['imdbRating'],
                             genres: movie['Genre'],

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:moviesearchapp/ui/screens/discover.dart';
 import 'package:moviesearchapp/ui/specialwidgets/movieinfocard.dart';
 import 'package:moviesearchapp/ui/specialwidgets/ratingcard.dart';
-import 'package:moviesearchapp/ui/screens/moviedetailspage.dart'; // Import the Movie Details Page
+import 'package:moviesearchapp/ui/screens/moviedetailspage.dart';
+import 'package:readmore/readmore.dart';
+
 
 class Mainpage extends StatefulWidget {
   final List movies;
@@ -144,6 +146,7 @@ class _MainpageState extends State<Mainpage> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => Moviedetailspage(
+                                id: movie['imdbID'],
                                 title: movie['Title'],
                                 rating: movie['imdbRating'],
                                 genres: movie['Genre'],

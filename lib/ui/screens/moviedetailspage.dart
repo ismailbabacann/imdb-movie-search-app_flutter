@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Moviedetailspage extends StatefulWidget {
   final String title;
@@ -6,6 +7,7 @@ class Moviedetailspage extends StatefulWidget {
   final String genres;
   final String plot;
   final String posterUrl;
+  final String id;
 
   const Moviedetailspage({
     super.key,
@@ -14,6 +16,7 @@ class Moviedetailspage extends StatefulWidget {
     required this.genres,
     required this.plot,
     required this.posterUrl,
+    required this.id,
   });
 
   @override
@@ -23,6 +26,15 @@ class Moviedetailspage extends StatefulWidget {
 class _MoviedetailspageState extends State<Moviedetailspage> {
   var isBookmarked = false;
 
+  void commandLaunch(String command) async {
+    Uri url = Uri.parse(command);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      print('Could not launch $command');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double deviceHeight = MediaQuery.of(context).size.height;
@@ -31,7 +43,7 @@ class _MoviedetailspageState extends State<Moviedetailspage> {
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.black,
-        iconTheme: IconThemeData(color: Colors.white , size: 40),
+        iconTheme: IconThemeData(color: Colors.white, size: 40),
         actions: [
           IconButton(
             alignment: Alignment.topRight,
@@ -51,9 +63,14 @@ class _MoviedetailspageState extends State<Moviedetailspage> {
       body: Stack(
         children: [
           // Background image
-          Image(image: NetworkImage(widget.posterUrl), fit: BoxFit.cover,width: deviceWidth,height: deviceHeight/2,),
+          Image.network(
+            widget.posterUrl,
+            fit: BoxFit.cover,
+            width: deviceWidth,
+            height: deviceHeight / 2,
+          ),
           Container(
-            height: deviceHeight  ,
+            height: deviceHeight,
             width: deviceWidth,
           ),
           // Black gradient
@@ -103,9 +120,12 @@ class _MoviedetailspageState extends State<Moviedetailspage> {
                       ),
                       SizedBox(width: 4),
                       ...List.generate(5, (index) {
-                        double starRating = double.tryParse(widget.rating) ?? 0.0;
+                        double starRating =
+                            double.tryParse(widget.rating) ?? 0.0;
                         return Icon(
-                          index < starRating / 2 ? Icons.star : Icons.star_border,
+                          index < starRating / 2
+                              ? Icons.star
+                              : Icons.star_border,
                           color: Colors.amber,
                           size: 24,
                         );
@@ -140,7 +160,11 @@ class _MoviedetailspageState extends State<Moviedetailspage> {
                           ),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        commandLaunch(
+                            'https://www.imdb.com/title/${widget.id}'
+                        ); // Ensure correct URL format
+                      },
                       child: Text(
                         "WATCH TRAILER",
                         style: TextStyle(fontSize: 15, color: Colors.black),
