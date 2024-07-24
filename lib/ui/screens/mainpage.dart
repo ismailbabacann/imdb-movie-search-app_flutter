@@ -84,9 +84,24 @@ class _MainpageState extends State<Mainpage> {
                     return Row(
                       children: [
                         RatingCard(
-                          title: mov["Title"],
-                          rating: mov["imdbRating"],
-                          posterUrl: mov["Poster"],
+                          title: mov['Title'],
+                          rating: mov['imdbRating'],
+                          posterUrl: mov['Poster'],
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Moviedetailspage(
+                                  id: mov['imdbID'],
+                                  title: mov['Title'],
+                                  rating: mov['imdbRating'],
+                                  genres: mov['Genre'],
+                                  plot: mov['Plot'],
+                                  posterUrl: mov['Poster'],
+                                ),
+                              ),
+                            );
+                          },
                         ),
                         SizedBox(width: 20),
                       ],

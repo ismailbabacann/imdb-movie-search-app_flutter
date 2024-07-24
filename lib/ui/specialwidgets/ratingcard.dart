@@ -4,12 +4,15 @@ class RatingCard extends StatefulWidget {
   final String title;
   final String rating;
   final String posterUrl;
+  final VoidCallback onTap;
 
   RatingCard({
     Key? key,
     required this.title,
     required this.rating,
     required this.posterUrl,
+    required this.onTap,
+
   }) : super(key: key);
 
   @override
@@ -28,15 +31,18 @@ class _RatingCardState extends State<RatingCard> {
       children: [
         Stack(
           children: [
-            Container(
-              width: deviceWidth / 1.18,
-              height: deviceHeight / 3.8,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Colors.grey,
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: NetworkImage(widget.posterUrl),
+            GestureDetector(
+              onTap: widget.onTap,
+              child: Container(
+                width: deviceWidth / 1.18,
+                height: deviceHeight / 3.8,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.grey,
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(widget.posterUrl),
+                  ),
                 ),
               ),
             ),

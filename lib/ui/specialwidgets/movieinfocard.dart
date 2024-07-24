@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:readmore/readmore.dart';
 
 class Movieinfocard extends StatefulWidget {
   final String title;
@@ -105,14 +106,17 @@ class _MovieinfocardState extends State<Movieinfocard> {
                       fontSize: 16,
                     )),
                 SizedBox(height: 10),
-                Text(
+                ReadMoreText(
                   widget.plot,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey,
-                  ),
-                  textAlign: TextAlign.start,
+                  trimLines: 2,
+                  colorClickableText: Colors.amber,
+                  trimMode: TrimMode.Line,
+                  trimCollapsedText: 'Read More',
+                  trimExpandedText: 'Read Less',
+                  style: TextStyle(color: Colors.grey),
+                  moreStyle: TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),
                 ),
+
                 SizedBox(height: 10),
               ],
             ),

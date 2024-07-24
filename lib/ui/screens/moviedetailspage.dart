@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:readmore/readmore.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class Moviedetailspage extends StatefulWidget {
   final String title;
@@ -26,12 +28,10 @@ class Moviedetailspage extends StatefulWidget {
 class _MoviedetailspageState extends State<Moviedetailspage> {
   var isBookmarked = false;
 
-  void commandLaunch(String command) async {
-    Uri url = Uri.parse(command);
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.externalApplication);
-    } else {
-      print('Could not launch $command');
+  void _launchURL(String urlString) async {
+    final Uri url = Uri.parse(urlString);
+    if (!await launchUrlString(url.toString(), mode: LaunchMode.externalApplication)) {
+      throw 'Could not launch $urlString';
     }
   }
 
@@ -137,14 +137,15 @@ class _MoviedetailspageState extends State<Moviedetailspage> {
                     style: TextStyle(color: Colors.white),
                   ),
                   SizedBox(height: 10),
-                  Text(
+                  ReadMoreText(
                     widget.plot,
+                    trimLines: 2,
+                    colorClickableText: Colors.amber,
+                    trimMode: TrimMode.Line,
+                    trimCollapsedText: 'Read More',
+                    trimExpandedText: 'Read Less',
                     style: TextStyle(color: Colors.grey),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    "Read More",
-                    style: TextStyle(color: Colors.amber),
+                    moreStyle: TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 20),
                   SizedBox(
@@ -161,7 +162,7 @@ class _MoviedetailspageState extends State<Moviedetailspage> {
                         ),
                       ),
                       onPressed: () {
-                        commandLaunch(
+                        _launchURL(
                             'https://www.imdb.com/title/${widget.id}'
                         ); // Ensure correct URL format
                       },
