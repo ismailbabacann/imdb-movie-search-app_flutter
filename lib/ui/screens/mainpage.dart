@@ -3,7 +3,6 @@ import 'package:moviesearchapp/ui/screens/discover.dart';
 import 'package:moviesearchapp/ui/specialwidgets/movieinfocard.dart';
 import 'package:moviesearchapp/ui/specialwidgets/ratingcard.dart';
 import 'package:moviesearchapp/ui/screens/moviedetailspage.dart';
-import 'package:readmore/readmore.dart';
 
 
 class Mainpage extends StatefulWidget {

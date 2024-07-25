@@ -3,7 +3,6 @@ import 'package:moviesearchapp/ui/screens/mainpage.dart';
 import 'package:moviesearchapp/ui/screens/bookmarkspage.dart';
 import 'package:moviesearchapp/ui/screens/searchpage.dart';
 import 'package:moviesearchapp/data/apiconnection.dart';
-import 'package:moviesearchapp/ui/specialwidgets/customchip.dart';
 
 
 class Navigation extends StatefulWidget {

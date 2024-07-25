@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:moviesearchapp/data/apiconnection.dart';
 import 'package:moviesearchapp/ui/specialwidgets/customchip.dart';
 import 'package:moviesearchapp/ui/specialwidgets/movieinfocard.dart';
-import 'package:moviesearchapp/ui/specialwidgets/movieinfocard.dart';
 
 class SearchPage extends StatefulWidget {
   @override
