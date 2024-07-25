@@ -42,7 +42,7 @@ class _BookmarkspageState extends State<Bookmarkspage> {
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(
-          padding: EdgeInsets.only(left: 20),
+          padding: EdgeInsets.fromLTRB(20,16,0,0),
           child: Column(
             children: widget.movies.map((movie) {
               return Column(

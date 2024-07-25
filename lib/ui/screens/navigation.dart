@@ -3,6 +3,7 @@ import 'package:moviesearchapp/ui/screens/mainpage.dart';
 import 'package:moviesearchapp/ui/screens/bookmarkspage.dart';
 import 'package:moviesearchapp/ui/screens/searchpage.dart';
 import 'package:moviesearchapp/data/apiconnection.dart';
+import 'package:moviesearchapp/ui/specialwidgets/customchip.dart';
 
 
 class Navigation extends StatefulWidget {
@@ -35,7 +36,7 @@ class _NavigationState extends State<Navigation> {
   Widget build(BuildContext context) {
     List<Widget> pages = [
       Mainpage(movies: movies),
-      Searchpage(movies: []),
+      SearchPage(),
       Bookmarkspage(movies: movies),
     ];
 

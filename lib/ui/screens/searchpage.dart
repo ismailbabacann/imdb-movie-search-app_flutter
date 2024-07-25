@@ -1,157 +1,153 @@
 import 'package:flutter/material.dart';
-import 'package:moviesearchapp/ui/screens/moviedetailspage.dart';
+import 'package:moviesearchapp/data/apiconnection.dart';
 import 'package:moviesearchapp/ui/specialwidgets/customchip.dart';
 import 'package:moviesearchapp/ui/specialwidgets/movieinfocard.dart';
+import 'package:moviesearchapp/ui/specialwidgets/movieinfocard.dart';
 
-class Searchpage extends StatefulWidget {
-
-  final List movies;
-  const Searchpage({super.key, required this.movies});
-
+class SearchPage extends StatefulWidget {
   @override
-  State<Searchpage> createState() => _SearchpageState();
+  _SearchPageState createState() => _SearchPageState();
 }
 
-class _SearchpageState extends State<Searchpage> {
-  TextEditingController _searchController = TextEditingController();
+class _SearchPageState extends State<SearchPage> {
+  late Apicategories apiService;
+  List<Movie> searchResults = [];
+  TextEditingController searchController = TextEditingController();
+  String selectedCategory = 'ALL';
 
   @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
+  void initState() {
+    super.initState();
+    apiService = Apicategories();
   }
 
-  void _onSearchChanged() {
-    print("Arama terimi: ${_searchController.text}");
+  void _searchMovies(String query) async {
+    if (query.isNotEmpty) {
+      try {
+        var results = await apiService.fetchMovies(query);
+        setState(() {
+          searchResults = results;
+        });
+      } catch (e) {
+        setState(() {
+          searchResults = [];
+        });
+      }
+    } else {
+      setState(() {
+        searchResults = [];
+      });
+    }
+  }
+
+  void _onCategorySelected(String category) {
+    setState(() {
+      selectedCategory = category;
+      _searchMovies(category == 'ALL' ? 'movie' : category.toLowerCase());
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    double deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
         leading: Padding(
-          padding: const EdgeInsets.only(left: 20),
-          child: IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
+          padding: const EdgeInsets.only(left: 30),
+          child: Icon(Icons.search_sharp),
         ),
-        backgroundColor: Colors.black,
         iconTheme: IconThemeData(color: Colors.amber, size: 40),
+        backgroundColor: Colors.black,
         title: RichText(
-          text: TextSpan(
+          text: const TextSpan(
             text: "Search",
             style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
             children: [
               TextSpan(
-                  text: ".",
-                  style: TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.amber))
+                text: ".",
+                style: TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.amber,
+                ),
+              ),
             ],
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // Metin sola hizalama
-          children: [
-            SizedBox(
-              height: 20,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: Container(
-                width: deviceWidth,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: Color(0xFF2C2C2C), // Koyu gri arka plan
-                  borderRadius: BorderRadius.circular(7), // Yuvarlak köşeler
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
+              controller: searchController,
+              onSubmitted: (query) => _searchMovies(query),
+              decoration: InputDecoration(
+                hintText: 'Search',
+                hintStyle: TextStyle(color: Colors.grey),
+                prefixIcon: Icon(Icons.search, color: Colors.white),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(5),
+                  borderSide: BorderSide.none,
                 ),
-                child: TextField(
-                  controller: _searchController,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.search, color: Colors.white),
-                    // Beyaz arama ikonu
-                    hintText: 'Search',
-                    hintStyle: TextStyle(color: Colors.white54),
-                    // Gri renkte ipucu metni
-                    border: InputBorder.none,
-                    // Kenar çizgisi yok
-                    contentPadding: EdgeInsets.symmetric(
-                        vertical: 15), // İçerik dolgu alanı
+                filled: true,
+                fillColor: Colors.grey[850],
+              ),
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: CustomChip(
+                    categories: ['ALL', 'ACTION', 'DRAMA', 'COMEDY', 'ADVENTURE', 'ANIMATION', 'HISTORY', 'HORROR', 'WESTERN', 'ROMANCE'],
+                    onCategorySelected: _onCategorySelected,
+                    selectedCategory: selectedCategory,
                   ),
-                  style: TextStyle(
-                      color: Colors.white, fontSize: 18), // Beyaz yazı rengi
                 ),
-              ),
+              ],
             ),
-            SizedBox(
-              height: 20,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Row(
+              children: [
+                Text(
+                  'Search results '
+                  //${searchResults.length}
+                  ,
+                  style: TextStyle(color: Colors.white, fontSize: 18),
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 15),
-            //  child: Customchip(),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20),
-              // Sol tarafa hizalama için padding ekle
-              child: Text(
-                "Search Result (3)",
-                style: TextStyle(color: Colors.white, fontSize: 20),
-                textAlign: TextAlign.start,
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Column(
-                children: widget.movies.map((movie) {
-                  return Column(
-                    children: [
-                      Movieinfocard(
-                        title: movie['Title'],
-                        rating: movie['imdbRating'],
-                        genres: movie['Genre'],
-                        plot: movie['Plot'],
-                        posterUrl: movie['Poster'],
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Moviedetailspage(
-                                id: movie['id'],
-                                title: movie['Title'],
-                                rating: movie['imdbRating'],
-                                genres: movie['Genre'],
-                                plot: movie['Plot'],
-                                posterUrl: movie['Poster'],
-                              ),
-                            ),
-                          );
-                        },
-
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                    ],
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ListView.builder(
+                itemCount: searchResults.length,
+                itemBuilder: (BuildContext context, int index) {
+                  var movie = searchResults[index];
+                  return Movieinfocard(
+                    title: movie.title,
+                    rating: "3.5",
+                    // Placeholder for rating, replace with actual rating if available
+                    genres: "Action, Comedy, Crime",
+                    // Placeholder for genres, replace with actual genres if available// Placeholder for plot, replace with actual plot if available
+                    plot: "",
+                    posterUrl: movie.poster,
+                    onTap: () {
+                      // Define what happens when a movie card is tapped
+                    },
                   );
-                }).toList(),
+                },
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
