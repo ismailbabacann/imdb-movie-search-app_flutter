@@ -12,7 +12,6 @@ class RatingCard extends StatefulWidget {
     required this.rating,
     required this.posterUrl,
     required this.onTap,
-
   }) : super(key: key);
 
   @override

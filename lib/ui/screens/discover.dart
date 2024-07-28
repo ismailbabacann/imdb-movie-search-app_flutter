@@ -43,7 +43,6 @@ class _DiscoverState extends State<Discover> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -59,7 +58,9 @@ class _DiscoverState extends State<Discover> {
                   style: TextStyle(
                       fontSize: 40,
                       fontWeight: FontWeight.bold,
-                      color: Colors.amber))
+                      color: Colors.amber
+                  )
+              )
             ],
           ),
         ),
@@ -93,7 +94,7 @@ class _DiscoverState extends State<Discover> {
                   crossAxisCount: 2,
                   crossAxisSpacing: 15,
                   mainAxisSpacing: 15,
-                  childAspectRatio: 9/16,
+                  childAspectRatio: 9 / 16,
                 ),
                 itemBuilder: (BuildContext context, int index) {
                   return Container(

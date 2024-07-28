@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:moviesearchapp/data/apiconnection.dart';
 import 'package:moviesearchapp/ui/screens/discover.dart';
 import 'package:moviesearchapp/ui/specialwidgets/movieinfocard.dart';
 import 'package:moviesearchapp/ui/specialwidgets/ratingcard.dart';
 import 'package:moviesearchapp/ui/screens/moviedetailspage.dart';
-
+import 'package:moviesearchapp/ui/screens/moviedetailspage.dart';
 
 class Mainpage extends StatefulWidget {
-  final List movies;
+  final List<Movie> movies;
 
   Mainpage({Key? key, required this.movies}) : super(key: key);
 
@@ -15,8 +16,8 @@ class Mainpage extends StatefulWidget {
 }
 
 class _MainpageState extends State<Mainpage> {
-  List bestMovies = [];
-  List newestMovies = [];
+  List<Movie> bestMovies = [];
+  List<Movie> newestMovies = [];
 
   @override
   void initState() {
@@ -26,23 +27,20 @@ class _MainpageState extends State<Mainpage> {
   }
 
   void _fetchBestMovies() {
-    // Sort movies by imdbRating in descending order
     widget.movies.sort((a, b) {
-      double ratingA = double.tryParse(a["imdbRating"]) ?? 0.0;
-      double ratingB = double.tryParse(b["imdbRating"]) ?? 0.0;
-      return ratingB.compareTo(ratingA); // Descending order
+      double ratingA = double.tryParse(a.rating) ?? 0.0;
+      double ratingB = double.tryParse(b.rating) ?? 0.0;
+      return ratingB.compareTo(ratingA);
     });
 
-    // Take the top 5 movies
     bestMovies = widget.movies.take(5).toList();
   }
 
   void _fetchNewestMovies() {
-    // Sort movies by year in descending order
     widget.movies.sort((a, b) {
-      int yearA = int.tryParse(a["Year"]) ?? 0;
-      int yearB = int.tryParse(b["Year"]) ?? 0;
-      return yearB.compareTo(yearA); // Descending order by year
+      int yearA = int.tryParse(a.year) ?? 0;
+      int yearB = int.tryParse(b.year) ?? 0;
+      return yearB.compareTo(yearA);
     });
     newestMovies = widget.movies.take(20).toList();
   }
@@ -57,7 +55,6 @@ class _MainpageState extends State<Mainpage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // TOP FIVE
               RichText(
                 text: const TextSpan(
                   text: "Top Five",
@@ -75,7 +72,6 @@ class _MainpageState extends State<Mainpage> {
                 ),
               ),
               SizedBox(height: 30),
-              // RATING CARD
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -83,21 +79,14 @@ class _MainpageState extends State<Mainpage> {
                     return Row(
                       children: [
                         RatingCard(
-                          title: mov['Title'],
-                          rating: mov['imdbRating'],
-                          posterUrl: mov['Poster'],
+                          title: mov.title,
+                          rating: mov.rating,
+                          posterUrl: mov.poster,
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => Moviedetailspage(
-                                  id: mov['imdbID'],
-                                  title: mov['Title'],
-                                  rating: mov['imdbRating'],
-                                  genres: mov['Genre'],
-                                  plot: mov['Plot'],
-                                  posterUrl: mov['Poster'],
-                                ),
+                                builder: (context) => Moviedetailspage(movie: mov),
                               ),
                             );
                           },
@@ -109,7 +98,6 @@ class _MainpageState extends State<Mainpage> {
                 ),
               ),
               SizedBox(height: 30),
-              // LATEST
               Row(
                 children: [
                   RichText(
@@ -150,23 +138,16 @@ class _MainpageState extends State<Mainpage> {
                   return Column(
                     children: [
                       Movieinfocard(
-                        title: movie['Title'],
-                        rating: movie['imdbRating'],
-                        genres: movie['Genre'],
-                        plot: movie['Plot'],
-                        posterUrl: movie['Poster'],
+                        title: movie.title,
+                        rating: movie.rating,
+                        genres: movie.genres,
+                        plot: movie.plot,
+                        posterUrl: movie.poster,
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => Moviedetailspage(
-                                id: movie['imdbID'],
-                                title: movie['Title'],
-                                rating: movie['imdbRating'],
-                                genres: movie['Genre'],
-                                plot: movie['Plot'],
-                                posterUrl: movie['Poster'],
-                              ),
+                              builder: (context) => Moviedetailspage(movie: movie),
                             ),
                           );
                         },

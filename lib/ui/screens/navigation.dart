@@ -4,7 +4,6 @@ import 'package:moviesearchapp/ui/screens/bookmarkspage.dart';
 import 'package:moviesearchapp/ui/screens/searchpage.dart';
 import 'package:moviesearchapp/data/apiconnection.dart';
 
-
 class Navigation extends StatefulWidget {
   const Navigation({super.key});
 
@@ -14,7 +13,7 @@ class Navigation extends StatefulWidget {
 
 class _NavigationState extends State<Navigation> {
   int selectedIndex = 0;
-  List movies = [];
+  List<Movie> movies = [];
   bool isLoading = true;
 
   @override
@@ -24,7 +23,8 @@ class _NavigationState extends State<Navigation> {
   }
 
   Future<void> fetchMovies() async {
-    List fetchedMovies = await fetchLatestMovies();
+    Apicategories apiCategories = Apicategories();
+    List<Movie> fetchedMovies = await apiCategories.fetchLatestMovies();
     setState(() {
       movies = fetchedMovies;
       isLoading = false;

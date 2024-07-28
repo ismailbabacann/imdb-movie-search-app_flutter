@@ -1,182 +1,61 @@
 import 'package:flutter/material.dart';
-import 'package:readmore/readmore.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+import 'package:moviesearchapp/data/apiconnection.dart';
 
-class Moviedetailspage extends StatefulWidget {
-  final String title;
-  final String rating;
-  final String genres;
-  final String plot;
-  final String posterUrl;
-  final String id;
+class Moviedetailspage extends StatelessWidget {
+  final Movie movie;
 
-  const Moviedetailspage({
-    super.key,
-    required this.title,
-    required this.rating,
-    required this.genres,
-    required this.plot,
-    required this.posterUrl,
-    required this.id,
-  });
-
-  @override
-  State<Moviedetailspage> createState() => _MoviedetailspageState();
-}
-
-class _MoviedetailspageState extends State<Moviedetailspage> {
-  var isBookmarked = false;
-
-  void _launchURL(String urlString) async {
-    final Uri url = Uri.parse(urlString);
-    if (!await launchUrlString(url.toString(), mode: LaunchMode.externalApplication)) {
-      throw 'Could not launch $urlString';
-    }
-  }
+  Moviedetailspage({required this.movie});
 
   @override
   Widget build(BuildContext context) {
-    double deviceHeight = MediaQuery.of(context).size.height;
-    double deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: Colors.black,
-        iconTheme: IconThemeData(color: Colors.white, size: 40),
-        actions: [
-          IconButton(
-            alignment: Alignment.topRight,
-            iconSize: 40,
-            icon: Icon(
-              isBookmarked ? Icons.bookmark : Icons.bookmark_outline,
-              color: isBookmarked ? Colors.amber : Colors.white,
-            ),
-            onPressed: () {
-              setState(() {
-                isBookmarked = !isBookmarked;
-              });
-            },
-          ),
-        ],
+        title: Text(movie.title),
       ),
-      body: Stack(
-        children: [
-          // Background image
-          Image.network(
-            widget.posterUrl,
-            fit: BoxFit.cover,
-            width: deviceWidth,
-            height: deviceHeight / 2,
-          ),
-          Container(
-            height: deviceHeight,
-            width: deviceWidth,
-          ),
-          // Black gradient
-          Positioned(
-            bottom: 0,
-            child: Container(
-              height: deviceHeight / 2,
-              width: deviceWidth,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.transparent,
-                    Colors.black.withOpacity(0.8),
-                    Colors.black,
-                  ],
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.network(movie.poster),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                movie.title,
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-          ),
-          // Content
-          Positioned(
-            bottom: 0,
-            child: Container(
-              padding: EdgeInsets.all(20),
-              width: deviceWidth,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.title,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        widget.rating,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                        ),
-                      ),
-                      SizedBox(width: 4),
-                      ...List.generate(5, (index) {
-                        double starRating =
-                            double.tryParse(widget.rating) ?? 0.0;
-                        return Icon(
-                          index < starRating / 2
-                              ? Icons.star
-                              : Icons.star_border,
-                          color: Colors.amber,
-                          size: 24,
-                        );
-                      }),
-                    ],
-                  ),
-                  Text(
-                    widget.genres,
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  SizedBox(height: 10),
-                  ReadMoreText(
-                    widget.plot,
-                    trimLines: 2,
-                    colorClickableText: Colors.amber,
-                    trimMode: TrimMode.Line,
-                    trimCollapsedText: 'Read More',
-                    trimExpandedText: 'Read Less',
-                    style: TextStyle(color: Colors.grey),
-                    moreStyle: TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 20),
-                  SizedBox(
-                    width: deviceWidth,
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor:
-                        MaterialStateProperty.all(Colors.amber),
-                        shape:
-                        MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                        ),
-                      ),
-                      onPressed: () {
-                        _launchURL(
-                            'https://www.imdb.com/title/${widget.id}'
-                        ); // Ensure correct URL format
-                      },
-                      child: Text(
-                        "WATCH TRAILER",
-                        style: TextStyle(fontSize: 15, color: Colors.black),
-                      ),
-                    ),
-                  ),
-                ],
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "Rating: ${movie.rating}",
+                style: TextStyle(
+                  fontSize: 18,
+                ),
               ),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "Genres: ${movie.genres}",
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                movie.plot,
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
