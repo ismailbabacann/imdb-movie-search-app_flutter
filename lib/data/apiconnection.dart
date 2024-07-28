@@ -38,7 +38,17 @@ class Apicategories {
       Map<String, dynamic> jsonResponse = json.decode(response.body);
       if (jsonResponse['Response'] == 'True') {
         List movies = jsonResponse['Search'];
-        return movies.map((movie) => Movie.fromJson(movie)).toList();
+        List<Movie> detailedMovies = [];
+
+        for (var movie in movies) {
+          final movieDetailsResponse = await http.get(
+            Uri.parse('$baseUrl?i=${movie['imdbID']}&apikey=$apiKey'),
+          );
+          if (movieDetailsResponse.statusCode == 200) {
+            detailedMovies.add(Movie.fromJson(json.decode(movieDetailsResponse.body)));
+          }
+        }
+        return detailedMovies;
       } else {
         throw Exception('No movies found');
       }
@@ -49,17 +59,33 @@ class Apicategories {
 }
 
 class Movie {
+  final String id;
   final String title;
   final String poster;
   final String year;
+  final String plot;
+  final String rating;
+  final String genres;
 
-  Movie({required this.title, required this.poster, required this.year});
+  Movie({
+    required this.id,
+    required this.title,
+    required this.poster,
+    required this.year,
+    required this.plot,
+    required this.rating,
+    required this.genres,
+  });
 
   factory Movie.fromJson(Map<String, dynamic> json) {
     return Movie(
+      id: json['imdbID'],
       title: json['Title'],
       poster: json['Poster'],
       year: json['Year'],
+      plot: json['Plot'],
+      rating: json['imdbRating'],
+      genres: json['Genre'],
     );
   }
 }

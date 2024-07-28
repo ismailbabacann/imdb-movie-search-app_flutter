@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moviesearchapp/data/apiconnection.dart';
+import 'package:moviesearchapp/ui/screens/moviedetailspage.dart';
 import 'package:moviesearchapp/ui/specialwidgets/customchip.dart';
 import 'package:moviesearchapp/ui/specialwidgets/movieinfocard.dart';
 
@@ -102,7 +103,18 @@ class _SearchPageState extends State<SearchPage> {
                 Padding(
                   padding: const EdgeInsets.only(top: 20),
                   child: CustomChip(
-                    categories: ['ALL', 'ACTION', 'DRAMA', 'COMEDY', 'ADVENTURE', 'ANIMATION', 'HISTORY', 'HORROR', 'WESTERN', 'ROMANCE'],
+                    categories: [
+                      'ALL',
+                      'ACTION',
+                      'DRAMA',
+                      'COMEDY',
+                      'ADVENTURE',
+                      'ANIMATION',
+                      'HISTORY',
+                      'HORROR',
+                      'WESTERN',
+                      'ROMANCE'
+                    ],
                     onCategorySelected: _onCategorySelected,
                     selectedCategory: selectedCategory,
                   ),
@@ -115,9 +127,7 @@ class _SearchPageState extends State<SearchPage> {
             child: Row(
               children: [
                 Text(
-                  'Search results '
-                  //${searchResults.length}
-                  ,
+                  'Search results (${searchResults.length})',
                   style: TextStyle(color: Colors.white, fontSize: 18),
                 ),
               ],
@@ -130,17 +140,30 @@ class _SearchPageState extends State<SearchPage> {
                 itemCount: searchResults.length,
                 itemBuilder: (BuildContext context, int index) {
                   var movie = searchResults[index];
-                  return Movieinfocard(
-                    title: movie.title,
-                    rating: "3.5",
-                    // Placeholder for rating, replace with actual rating if available
-                    genres: "Action, Comedy, Crime",
-                    // Placeholder for genres, replace with actual genres if available// Placeholder for plot, replace with actual plot if available
-                    plot: "",
-                    posterUrl: movie.poster,
-                    onTap: () {
-                      // Define what happens when a movie card is tapped
-                    },
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Movieinfocard(
+                      title: movie.title,
+                      rating: movie.rating,
+                      genres: movie.genres,
+                      plot: movie.plot,
+                      posterUrl: movie.poster,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Moviedetailspage(
+                              id: movie.id,
+                              title: movie.title,
+                              rating: movie.rating,
+                              genres: movie.genres,
+                              plot: movie.plot,
+                              posterUrl: movie.poster,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   );
                 },
               ),
