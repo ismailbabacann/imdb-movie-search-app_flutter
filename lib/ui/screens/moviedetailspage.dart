@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:readmore/readmore.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:hive/hive.dart';
 
 class Moviedetailspage extends StatefulWidget {
   final String title;
@@ -27,6 +28,35 @@ class Moviedetailspage extends StatefulWidget {
 
 class _MoviedetailspageState extends State<Moviedetailspage> {
   var isBookmarked = false;
+  final Box bookmarksBox = Hive.box('bookmarks');
+
+  @override
+  void initState() {
+    super.initState();
+    List bookmarkedMovies = bookmarksBox.get('movies', defaultValue: []);
+    isBookmarked = bookmarkedMovies.any((movie) => movie['id'] == widget.id);
+  }
+
+  void toggleBookmark() {
+    List bookmarkedMovies = bookmarksBox.get('movies', defaultValue: []);
+    if (isBookmarked) {
+      bookmarkedMovies.removeWhere((movie) => movie['id'] == widget.id);
+    } else {
+      bookmarkedMovies.add({
+        'id': widget.id,
+        'title': widget.title,
+        'rating': widget.rating,
+        'genres': widget.genres,
+        'plot': widget.plot,
+        'posterUrl': widget.posterUrl,
+      });
+    }
+    bookmarksBox.put('movies', bookmarkedMovies);
+    setState(() {
+      isBookmarked = !isBookmarked;
+    });
+  }
+
 
   void _launchURL(String urlString) async {
     final Uri url = Uri.parse(urlString);
@@ -52,11 +82,7 @@ class _MoviedetailspageState extends State<Moviedetailspage> {
               isBookmarked ? Icons.bookmark : Icons.bookmark_outline,
               color: isBookmarked ? Colors.amber : Colors.white,
             ),
-            onPressed: () {
-              setState(() {
-                isBookmarked = !isBookmarked;
-              });
-            },
+            onPressed: toggleBookmark,
           ),
         ],
       ),

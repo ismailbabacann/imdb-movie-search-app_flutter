@@ -36,7 +36,7 @@ class _NavigationState extends State<Navigation> {
     List<Widget> pages = [
       Mainpage(movies: movies),
       SearchPage(),
-      Bookmarkspage(movies: movies),
+      Bookmarkspage(),
     ];
 
     return Scaffold(
