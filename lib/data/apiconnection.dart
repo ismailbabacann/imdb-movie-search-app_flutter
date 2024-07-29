@@ -66,6 +66,14 @@ class Movie {
   final String plot;
   final String rating;
   final String genres;
+  final String runtime;
+  final String awards;
+  final String actors;
+  final String director;
+  final String boxOffice;
+  final String imdbVotes;
+  final String country;
+  final String released;
 
   Movie({
     required this.id,
@@ -75,6 +83,14 @@ class Movie {
     required this.plot,
     required this.rating,
     required this.genres,
+    required this.runtime,
+    required this.awards,
+    required this.actors,
+    required this.director,
+    required this.boxOffice,
+    required this.imdbVotes,
+    required this.released,
+    required this.country,
   });
 
   factory Movie.fromJson(Map<String, dynamic> json) {
@@ -86,7 +102,16 @@ class Movie {
       plot: json['Plot'],
       rating: json['imdbRating'],
       genres: json['Genre'],
+      runtime: json['Runtime'],
+      awards: json['Awards'],
+      actors: json['Actors'],
+      director: json['Director'],
+      boxOffice: json['BoxOffice'],
+      imdbVotes: json['imdbVotes'],
+      country: json['Released'],
+      released: json['Country'],
     );
   }
 }
+
 

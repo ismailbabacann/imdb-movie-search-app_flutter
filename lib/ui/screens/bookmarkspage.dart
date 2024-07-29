@@ -4,7 +4,7 @@ import 'package:moviesearchapp/ui/screens/moviedetailspage.dart';
 import 'package:moviesearchapp/ui/specialwidgets/movieinfocard.dart';
 
 class Bookmarkspage extends StatefulWidget {
-  const Bookmarkspage({super.key,});
+  const Bookmarkspage({super.key});
 
   @override
   State<Bookmarkspage> createState() => _BookmarkspageState();
@@ -12,6 +12,7 @@ class Bookmarkspage extends StatefulWidget {
 
 class _BookmarkspageState extends State<Bookmarkspage> {
   final Box bookmarksBox = Hive.box('bookmarks');
+
   @override
   Widget build(BuildContext context) {
     List bookmarkedMovies = bookmarksBox.get('movies', defaultValue: []);
@@ -21,9 +22,9 @@ class _BookmarkspageState extends State<Bookmarkspage> {
       appBar: AppBar(
         leading: Padding(
           padding: const EdgeInsets.only(left: 30),
-          child: Icon(Icons.bookmark,),
+          child: Icon(Icons.bookmark),
         ),
-        iconTheme: IconThemeData(color: Colors.amber , size: 40),
+        iconTheme: IconThemeData(color: Colors.amber, size: 40),
         backgroundColor: Colors.black,
         title: RichText(
           text: const TextSpan(
@@ -31,11 +32,13 @@ class _BookmarkspageState extends State<Bookmarkspage> {
             style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
             children: [
               TextSpan(
-                  text: ".",
-                  style: TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.amber))
+                text: ".",
+                style: TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.amber,
+                ),
+              ),
             ],
           ),
         ),
@@ -44,27 +47,46 @@ class _BookmarkspageState extends State<Bookmarkspage> {
         itemCount: bookmarkedMovies.length,
         itemBuilder: (context, index) {
           final movie = bookmarkedMovies[index];
-          return Movieinfocard(
-            title: movie['title'],
-            rating: movie['rating'],
-            genres: movie['genres'],
-            plot: movie['plot'],
-            posterUrl: movie['posterUrl'],
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Moviedetailspage(
-                    title: movie['title'],
-                    rating: movie['rating'],
-                    genres: movie['genres'],
-                    plot: movie['plot'],
-                    posterUrl: movie['posterUrl'],
-                    id: movie['id'],
+          return Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Movieinfocard(
+              title: movie['title'],
+              rating: movie['rating'],
+              genres: movie['genres'],
+              plot: movie['plot'],
+              posterUrl: movie['posterUrl'],
+              runtime: movie['Runtime'] ?? '',
+              awards: movie['Awards'] ?? '',
+              actors: movie['Actors'] ?? '',
+              director: movie['Director'] ?? '',
+              boxOffice: movie['BoxOffice'] ?? '',
+              imdbVotes: movie['imdbVotes'] ?? '',
+              country: movie['Country'] ?? '',
+              released: movie['Released'] ?? '',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Moviedetailspage(
+                      title: movie['title'],
+                      rating: movie['rating'],
+                      genres: movie['genres'],
+                      plot: movie['plot'],
+                      posterUrl: movie['posterUrl'],
+                      id: movie['id'],
+                      runtime: movie['Runtime'] ?? '',
+                      awards: movie['Awards'] ?? '',
+                      actors: movie['Actors'] ?? '',
+                      director: movie['Director'] ?? '',
+                      boxOffice: movie['BoxOffice'] ?? '',
+                      imdbVotes: movie['imdbVotes'] ?? '',
+                      country: movie['Country'] ?? '',
+                      released: movie['Released'] ?? '',
+                    ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           );
         },
       ),

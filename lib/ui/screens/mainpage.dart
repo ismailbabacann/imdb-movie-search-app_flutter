@@ -4,7 +4,6 @@ import 'package:moviesearchapp/ui/specialwidgets/movieinfocard.dart';
 import 'package:moviesearchapp/ui/specialwidgets/ratingcard.dart';
 import 'package:moviesearchapp/ui/screens/moviedetailspage.dart';
 
-
 class Mainpage extends StatefulWidget {
   final List movies;
 
@@ -97,6 +96,14 @@ class _MainpageState extends State<Mainpage> {
                                   genres: mov['Genre'],
                                   plot: mov['Plot'],
                                   posterUrl: mov['Poster'],
+                                  runtime: mov['Runtime'],
+                                  awards: mov['Awards'],
+                                  actors: mov['Actors'],
+                                  director: mov['Director'],
+                                  boxOffice: mov['BoxOffice'],
+                                  imdbVotes: mov['imdbVotes'],
+                                  released: mov['Released'],
+                                  country: mov['Country'],
                                 ),
                               ),
                             );
@@ -115,7 +122,8 @@ class _MainpageState extends State<Mainpage> {
                   RichText(
                     text: const TextSpan(
                       text: "Latest",
-                      style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
                       children: [
                         TextSpan(
                           text: ".",
@@ -155,6 +163,14 @@ class _MainpageState extends State<Mainpage> {
                         genres: movie['Genre'],
                         plot: movie['Plot'],
                         posterUrl: movie['Poster'],
+                        runtime: movie['Runtime'],
+                        awards: movie['Awards'],
+                        actors: 'Actors',
+                        director: 'Director',
+                        boxOffice: 'BoxOffice',
+                        imdbVotes: 'imdbVotes',
+                        country: 'Country',
+                        released: 'Released',
                         onTap: () {
                           Navigator.push(
                             context,
@@ -166,6 +182,14 @@ class _MainpageState extends State<Mainpage> {
                                 genres: movie['Genre'],
                                 plot: movie['Plot'],
                                 posterUrl: movie['Poster'],
+                                runtime: movie['Runtime'],
+                                awards: movie['Awards'],
+                                actors: movie['Actors'],
+                                director: movie['Director'],
+                                boxOffice: movie['BoxOffice'],
+                                imdbVotes: movie['imdbVotes'],
+                                country: movie['Country'],
+                                released: movie['Released'],
                               ),
                             ),
                           );

@@ -20,7 +20,6 @@ class RatingCard extends StatefulWidget {
 }
 
 class _RatingCardState extends State<RatingCard> {
-  bool isBookmarked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -43,22 +42,6 @@ class _RatingCardState extends State<RatingCard> {
                     fit: BoxFit.cover,
                     image: NetworkImage(widget.posterUrl),
                   ),
-                ),
-              ),
-            ),
-            Positioned(
-              top: 8,
-              right: 8,
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    isBookmarked = !isBookmarked;
-                  });
-                },
-                child: Icon(
-                  isBookmarked ? Icons.bookmark : Icons.bookmark_outline_rounded,
-                  color: isBookmarked ? Colors.amber : Colors.white,
-                  size: 45,
                 ),
               ),
             ),

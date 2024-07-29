@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:readmore/readmore.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:hive/hive.dart';
 
@@ -11,6 +10,14 @@ class Moviedetailspage extends StatefulWidget {
   final String plot;
   final String posterUrl;
   final String id;
+  final String runtime;
+  final String awards;
+  final String actors;
+  final String director;
+  final String boxOffice;
+  final String imdbVotes;
+  final String country;
+  final String released;
 
   const Moviedetailspage({
     super.key,
@@ -20,6 +27,14 @@ class Moviedetailspage extends StatefulWidget {
     required this.plot,
     required this.posterUrl,
     required this.id,
+    required this.runtime,
+    required this.awards,
+    required this.actors,
+    required this.director,
+    required this.boxOffice,
+    required this.imdbVotes,
+    required this.country,
+    required this.released,
   });
 
   @override
@@ -49,6 +64,14 @@ class _MoviedetailspageState extends State<Moviedetailspage> {
         'genres': widget.genres,
         'plot': widget.plot,
         'posterUrl': widget.posterUrl,
+        'Runtime': widget.runtime,
+        'Awards': widget.awards,
+        'Actors': widget.actors,
+        'Director': widget.director,
+        'BoxOffice': widget.boxOffice,
+        'imdbVotes': widget.imdbVotes,
+        'Country': widget.country,
+        'Released': widget.released,
       });
     }
     bookmarksBox.put('movies', bookmarkedMovies);
@@ -56,7 +79,6 @@ class _MoviedetailspageState extends State<Moviedetailspage> {
       isBookmarked = !isBookmarked;
     });
   }
-
 
   void _launchURL(String urlString) async {
     final Uri url = Uri.parse(urlString);
@@ -146,57 +168,104 @@ class _MoviedetailspageState extends State<Moviedetailspage> {
                       ),
                       SizedBox(width: 4),
                       ...List.generate(5, (index) {
-                        double starRating =
-                            double.tryParse(widget.rating) ?? 0.0;
+                        double starRating = double.tryParse(widget.rating) ?? 0.0;
                         return Icon(
-                          index < starRating / 2
-                              ? Icons.star
-                              : Icons.star_border,
+                          index < starRating ? Icons.star : Icons.star_border,
                           color: Colors.amber,
-                          size: 24,
                         );
                       }),
                     ],
                   ),
-                  Text(
-                    widget.genres,
-                    style: TextStyle(color: Colors.white),
-                  ),
                   SizedBox(height: 10),
                   ReadMoreText(
                     widget.plot,
-                    trimLines: 2,
+                    trimLines: 3,
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
                     colorClickableText: Colors.amber,
                     trimMode: TrimMode.Line,
-                    trimCollapsedText: 'Read More',
-                    trimExpandedText: 'Read Less',
-                    style: TextStyle(color: Colors.grey),
-                    moreStyle: TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),
+                    trimCollapsedText: 'Read more',
+                    trimExpandedText: 'Read less',
                   ),
-                  SizedBox(height: 20),
-                  SizedBox(
-                    width: deviceWidth,
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor:
-                        MaterialStateProperty.all(Colors.amber),
-                        shape:
-                        MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                        ),
-                      ),
-                      onPressed: () {
-                        _launchURL(
-                            'https://www.imdb.com/title/${widget.id}'
-                        ); // Ensure correct URL format
-                      },
-                      child: Text(
-                        "WATCH TRAILER",
-                        style: TextStyle(fontSize: 15, color: Colors.black),
-                      ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Genres: ${widget.genres}',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
                     ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Runtime: ${widget.runtime}',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Awards: ${widget.awards}',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Actors: ${widget.actors}',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Director: ${widget.director}',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Box Office: ${widget.boxOffice}',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'IMDb Votes: ${widget.imdbVotes}',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Country: ${widget.country}',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Released: ${widget.released}',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      _launchURL('https://www.imdb.com/title/${widget.id}/');
+                    },
+                    child: Text('Open in IMDb'),
                   ),
                 ],
               ),

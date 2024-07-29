@@ -7,7 +7,15 @@ class Movieinfocard extends StatefulWidget {
   final String genres;
   final String plot;
   final String posterUrl;
-  final VoidCallback onTap; // Add this line
+  final VoidCallback onTap;
+  final String runtime;
+  final String awards;
+  final String actors;
+  final String director;
+  final String boxOffice;
+  final String imdbVotes;
+  final String country;
+  final String released;
 
   const Movieinfocard({
     Key? key,
@@ -16,7 +24,15 @@ class Movieinfocard extends StatefulWidget {
     required this.genres,
     required this.plot,
     required this.posterUrl,
-    required this.onTap, // Add this line
+    required this.onTap,
+    required this.runtime,
+    required this.awards,
+    required this.actors,
+    required this.director,
+    required this.boxOffice,
+    required this.imdbVotes,
+    required this.country,
+    required this.released,
   }) : super(key: key);
 
   @override
@@ -24,8 +40,6 @@ class Movieinfocard extends StatefulWidget {
 }
 
 class _MovieinfocardState extends State<Movieinfocard> {
-  bool isBookmarked = false;
-
   @override
   Widget build(BuildContext context) {
     double deviceHeight = MediaQuery.of(context).size.height;
@@ -46,22 +60,6 @@ class _MovieinfocardState extends State<Movieinfocard> {
                   image: DecorationImage(
                     image: NetworkImage(widget.posterUrl),
                     fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              Positioned(
-                top: 8,
-                right: 8,
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      isBookmarked = !isBookmarked;
-                    });
-                  },
-                  child: Icon(
-                    isBookmarked ? Icons.bookmark : Icons.bookmark_outline_rounded,
-                    color: isBookmarked ? Colors.amber : Colors.white,
-                    size: 45,
                   ),
                 ),
               ),
@@ -114,9 +112,9 @@ class _MovieinfocardState extends State<Movieinfocard> {
                   trimCollapsedText: 'Read More',
                   trimExpandedText: 'Read Less',
                   style: TextStyle(color: Colors.grey),
-                  moreStyle: TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),
+                  moreStyle: TextStyle(
+                      color: Colors.amber, fontWeight: FontWeight.bold),
                 ),
-
                 SizedBox(height: 10),
               ],
             ),
