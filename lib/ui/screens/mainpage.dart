@@ -48,11 +48,11 @@ class _MainpageState extends State<Mainpage> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(30, 40, 0, 0),
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        body: SingleChildScrollView(
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(4,8,8,8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

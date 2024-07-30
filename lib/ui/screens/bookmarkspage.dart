@@ -48,7 +48,7 @@ class _BookmarkspageState extends State<Bookmarkspage> {
         itemBuilder: (context, index) {
           final movie = bookmarkedMovies[index];
           return Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(6.0),
             child: Movieinfocard(
               title: movie['title'],
               rating: movie['rating'],

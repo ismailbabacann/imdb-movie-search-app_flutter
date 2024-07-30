@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:readmore/readmore.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:hive/hive.dart';
 
@@ -44,12 +43,24 @@ class Moviedetailspage extends StatefulWidget {
 class _MoviedetailspageState extends State<Moviedetailspage> {
   var isBookmarked = false;
   final Box bookmarksBox = Hive.box('bookmarks');
+  final PageController _pageController = PageController();
+  int _currentPage = 0;
+  bool _isExpanded = false;
 
   @override
   void initState() {
     super.initState();
     List bookmarkedMovies = bookmarksBox.get('movies', defaultValue: []);
     isBookmarked = bookmarkedMovies.any((movie) => movie['id'] == widget.id);
+
+    _pageController.addListener(() {
+      int nextPage = _pageController.page?.round() ?? 0;
+      if (_currentPage != nextPage) {
+        setState(() {
+          _currentPage = nextPage;
+        });
+      }
+    });
   }
 
   void toggleBookmark() {
@@ -91,6 +102,7 @@ class _MoviedetailspageState extends State<Moviedetailspage> {
   Widget build(BuildContext context) {
     double deviceHeight = MediaQuery.of(context).size.height;
     double deviceWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -110,22 +122,52 @@ class _MoviedetailspageState extends State<Moviedetailspage> {
       ),
       body: Stack(
         children: [
-          // Background image
-          Image.network(
-            widget.posterUrl,
-            fit: BoxFit.cover,
-            width: deviceWidth,
-            height: deviceHeight / 2,
+          // Dots Indicator
+          Positioned(
+            bottom: deviceHeight / 2 - 60,
+            left: deviceWidth / 2 - 30,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(3, (index) {
+                return Container(
+                  margin: EdgeInsets.symmetric(horizontal: 5),
+                  width: 10,
+                  height: 10,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: _currentPage == index ? Colors.amber : Colors.white,
+                  ),
+                );
+              }),
+            ),
           ),
-          Container(
-            height: deviceHeight,
-            width: deviceWidth,
+          // PageView for images
+          Positioned(
+            top: 0,
+            child: SizedBox(
+              height: deviceHeight / 2,
+              width: deviceWidth,
+              child: PageView(
+                controller: _pageController,
+                scrollDirection: Axis.horizontal,
+                children: List.generate(3, (index) {
+                  return Container(
+                    margin: EdgeInsets.all(8),
+                    child: Image.network(
+                      widget.posterUrl,
+                      fit: BoxFit.cover,
+                      width: deviceWidth,
+                    ),
+                  );
+                }),
+              ),
+            ),
           ),
           // Black gradient
           Positioned(
             bottom: 0,
             child: Container(
-              height: deviceHeight / 2,
+              height: deviceHeight / 1.7,
               width: deviceWidth,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -144,130 +186,141 @@ class _MoviedetailspageState extends State<Moviedetailspage> {
           Positioned(
             bottom: 0,
             child: Container(
+              decoration: BoxDecoration(borderRadius: BorderRadiusDirectional.circular(20)),
               padding: EdgeInsets.all(20),
               width: deviceWidth,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.title,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        widget.rating,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                        ),
+              child: Container(
+                color: _isExpanded ? Colors.black : Colors.transparent,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.title,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
                       ),
-                      SizedBox(width: 4),
-                      ...List.generate(5, (index) {
-                        double starRating = double.tryParse(widget.rating) ?? 0.0;
-                        return Icon(
-                          index < starRating ? Icons.star : Icons.star_border,
-                          color: Colors.amber,
-                        );
-                      }),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  ReadMoreText(
-                    widget.plot,
-                    trimLines: 3,
-                    style: TextStyle(
-                      color: Colors.white,
                     ),
-                    colorClickableText: Colors.amber,
-                    trimMode: TrimMode.Line,
-                    trimCollapsedText: 'Read more',
-                    trimExpandedText: 'Read less',
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Genres: ${widget.genres}',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
+                    Row(
+                      children: [
+                        Text(
+                          widget.rating,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
+                        ),
+                        SizedBox(width: 4),
+                        ...List.generate(5, (index) {
+                          double starRating = double.tryParse(widget.rating) ?? 0.0;
+                          return Icon(
+                            index < starRating / 2 ? Icons.star : Icons.star_border,
+                            color: Colors.amber,
+                          );
+                        }),
+                      ],
                     ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Runtime: ${widget.runtime}',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
+                    Text(
+                      widget.genres,
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Awards: ${widget.awards}',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
+                    SizedBox(height: 5),
+                    Container(
+                      color: _isExpanded ? Colors.black : Colors.transparent,
+                      child: AnimatedCrossFade(
+                        firstChild: Text(
+                          widget.plot,
+                          style: TextStyle(color: Colors.grey),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        secondChild: Text(
+                          widget.plot,
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        crossFadeState: _isExpanded
+                            ? CrossFadeState.showSecond
+                            : CrossFadeState.showFirst,
+                        duration: Duration(milliseconds: 500),
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Actors: ${widget.actors}',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _isExpanded = !_isExpanded;
+                        });
+                      },
+                      child: Text(
+                        _isExpanded ? 'Show less' : 'Read more',
+                        style: TextStyle(color: Colors.amber),
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Director: ${widget.director}',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
+                    Container(
+                      color: _isExpanded ? Colors.black : Colors.transparent,
+                      child: AnimatedCrossFade(
+                        firstChild: Container(),
+                        secondChild: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Released: ${widget.released}',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            Text(
+                              'Awards: ${widget.awards}',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            Text(
+                              'Actors: ${widget.actors}',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            Text(
+                              'Director: ${widget.director}',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            Text(
+                              'Box Office: ${widget.boxOffice}',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            Text(
+                              'IMDb Votes: ${widget.imdbVotes}',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            Text(
+                              'Country: ${widget.country}',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            Text(
+                              'Runtime: ${widget.runtime}',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                        crossFadeState: _isExpanded
+                            ? CrossFadeState.showSecond
+                            : CrossFadeState.showFirst,
+                        duration: Duration(milliseconds: 300),
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Box Office: ${widget.boxOffice}',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
+                    SizedBox(height: 5),
+                    ElevatedButton(
+                      onPressed: () {
+                        _launchURL('https://www.imdb.com/title/${widget.id}/');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.amber, // Arka plan rengi
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5), // Köşe yarıçapı
+                        ),
+                        fixedSize: Size.fromWidth(deviceWidth),
+                      ),
+                      child: Text('WATCH TRAILER', style: TextStyle(color: Colors.black)),
                     ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'IMDb Votes: ${widget.imdbVotes}',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Country: ${widget.country}',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Released: ${widget.released}',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: () {
-                      _launchURL('https://www.imdb.com/title/${widget.id}/');
-                    },
-                    child: Text('Open in IMDb'),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
