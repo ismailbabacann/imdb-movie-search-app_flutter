@@ -255,7 +255,9 @@ class _MoviedetailspageState extends State<Moviedetailspage> {
                       },
                       child: Text(
                         _isExpanded ? 'Show less' : 'Read more',
-                        style: TextStyle(color: Colors.amber),
+                        style: TextStyle(color: Colors.amber,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                     Container(

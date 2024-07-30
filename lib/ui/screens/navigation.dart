@@ -42,7 +42,9 @@ class _NavigationState extends State<Navigation> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator(
+        color: Colors.amber,
+      ))
           : pages[selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.black,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moviesearchapp/ui/specialwidgets/customchip.dart';
 import 'package:moviesearchapp/data/apiconnection.dart';
+import 'package:shimmer/shimmer.dart';
 
 class Discover extends StatefulWidget {
   const Discover({super.key});
@@ -13,6 +14,7 @@ class _DiscoverState extends State<Discover> {
   late Apicategories apiService;
   List<Movie> movies = [];
   String selectedCategory = 'ALL';
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -22,14 +24,19 @@ class _DiscoverState extends State<Discover> {
   }
 
   void _fetchMovies(String category) async {
+    setState(() {
+      isLoading = true;
+    });
     try {
       var fetchedMovies = await apiService.fetchMovies(category == 'ALL' ? 'movie' : category.toLowerCase());
       setState(() {
         movies = fetchedMovies;
+        isLoading = false;
       });
     } catch (e) {
       setState(() {
         movies = [];
+        isLoading = false;
       });
     }
   }
@@ -41,9 +48,57 @@ class _DiscoverState extends State<Discover> {
     });
   }
 
+  Widget _buildShimmer() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[700]!,
+      highlightColor: Colors.grey[500]!,
+      child: GridView.builder(
+        itemCount: 12,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 15,
+          mainAxisSpacing: 15,
+          childAspectRatio: 9 / 16,
+        ),
+        itemBuilder: (BuildContext context, int index) {
+          return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 10,),
+                Container(
+                  height: 200,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadiusDirectional.circular(5),
+                    color: Colors.grey,
+                  ),
+                ),
+                SizedBox(height: 10,),
+                Container(
+                  width: 120,
+                  height: 20,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadiusDirectional.circular(5),
+                    color: Colors.grey,
+                  ),
+                ),
+                SizedBox(height: 10,),
+                Container(
+                  width: 60,
+                  height: 15,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadiusDirectional.circular(5),
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -55,11 +110,13 @@ class _DiscoverState extends State<Discover> {
             style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
             children: [
               TextSpan(
-                  text: ".",
-                  style: TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.amber))
+                text: ".",
+                style: TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.amber,
+                ),
+              ),
             ],
           ),
         ),
@@ -73,7 +130,18 @@ class _DiscoverState extends State<Discover> {
                 Padding(
                   padding: const EdgeInsets.only(top: 20),
                   child: CustomChip(
-                    categories: ['ALL', 'ACTION', 'DRAMA', 'COMEDY', 'ADVENTURE', 'ANIMATION', 'HISTORY', 'HORROR', 'WESTERN', 'ROMANCE'],
+                    categories: [
+                      'ALL',
+                      'ACTION',
+                      'DRAMA',
+                      'COMEDY',
+                      'ADVENTURE',
+                      'ANIMATION',
+                      'HISTORY',
+                      'HORROR',
+                      'WESTERN',
+                      'ROMANCE'
+                    ],
                     onCategorySelected: _onCategorySelected,
                     selectedCategory: selectedCategory,
                   ),
@@ -81,19 +149,19 @@ class _DiscoverState extends State<Discover> {
               ],
             ),
           ),
-          SizedBox(
-            height: 14,
-          ),
+          SizedBox(height: 14),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: GridView.builder(
+              child: isLoading
+                  ? _buildShimmer()
+                  : GridView.builder(
                 itemCount: movies.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   crossAxisSpacing: 15,
                   mainAxisSpacing: 15,
-                  childAspectRatio: 9/16,
+                  childAspectRatio: 9 / 16,
                 ),
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
