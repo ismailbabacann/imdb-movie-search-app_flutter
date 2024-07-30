@@ -11,6 +11,7 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+
   late Apicategories apiService;
   List<Movie> searchResults = [];
   TextEditingController searchController = TextEditingController();
@@ -60,46 +61,78 @@ class _SearchPageState extends State<SearchPage> {
     return Shimmer.fromColors(
       baseColor: Colors.grey[700]!,
       highlightColor: Colors.grey[500]!,
-      child: Column(
-        children: List.generate(5, (index) => _buildShimmerItem()),
+      child: SingleChildScrollView(
+        child: Column(
+          children: List.generate(5, (index) => _buildShimmerItem()),
+        ),
       ),
     );
   }
 
   Widget _buildShimmerItem() {
+    double deviceHeight = MediaQuery.of(context).size.height;
+    double deviceWidth = MediaQuery.of(context).size.width;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        children: [
-          Container(
-            width: 100,
-            height: 150,
-            color: Colors.grey,
-          ),
-          const SizedBox(width: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 200,
-                height: 20,
-                color: Colors.grey,
+      child: Expanded(
+        child: Row(
+          children: [
+            Expanded(
+              child: Container(
+                width: deviceWidth / 2.3,
+                height:deviceHeight / 3.0,
+                decoration: BoxDecoration(
+                    color: Colors.grey!!,
+                    borderRadius: BorderRadiusDirectional.circular(20)
+                ),
               ),
-              const SizedBox(height: 10),
-              Container(
-                width: 150,
-                height: 20,
-                color: Colors.grey,
+            ),
+            const SizedBox(width: 10),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0,0,0,130),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 200,
+                    height: 20,
+                    decoration: BoxDecoration(
+                        color: Colors.grey!!,
+                        borderRadius: BorderRadiusDirectional.circular(5)
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    width: 150,
+                    height: 20,
+                    decoration: BoxDecoration(
+                        color: Colors.grey!!,
+                        borderRadius: BorderRadiusDirectional.circular(5)
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    width: 180,
+                    height: 20,
+                    decoration: BoxDecoration(
+                        color: Colors.grey!!,
+                        borderRadius: BorderRadiusDirectional.circular(5)
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Container(
+                    width: 200,
+                    height: 20,
+                    decoration: BoxDecoration(
+                        color: Colors.grey!!,
+                        borderRadius: BorderRadiusDirectional.circular(5)
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 10),
-              Container(
-                width: 180,
-                height: 20,
-                color: Colors.grey,
-              ),
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
