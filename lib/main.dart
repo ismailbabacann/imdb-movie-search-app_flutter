@@ -10,7 +10,7 @@ void main() async {
   await Hive.initFlutter(appDocumentDir.path);
   await Hive.openBox('bookmarks');
 
-  // Uygulamanın yalnızca dikey modda çalışmasını sağla
+  // Uygulamanın yalnızca dikey modda çalışmasını sağlama kodu
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,

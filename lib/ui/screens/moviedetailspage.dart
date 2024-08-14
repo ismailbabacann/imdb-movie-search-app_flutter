@@ -124,8 +124,9 @@ class _MoviedetailspageState extends State<Moviedetailspage> {
         children: [
           // Dots Indicator
           Positioned(
-            bottom: deviceHeight / 2 - 60,
-            left: deviceWidth / 2 - 30,
+            bottom: 300,
+            left: 100,
+            right: 100,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(3, (index) {
