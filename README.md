@@ -1,6 +1,6 @@
 # moviesearchapp
 
-
+One of my internship projects , you can search movie , bookmark movie and see all movies which comes from API
 <img src="https://github.com/user-attachments/assets/60fc25c9-5c6d-4e40-8811-17cac9043e8b" width="360" height="800">
 <img src="https://github.com/user-attachments/assets/f130ed3e-3065-4ceb-9c38-d66f261bb3d7" width="360" height="800">
 <img src="https://github.com/user-attachments/assets/48edecae-f0e2-41d8-a763-90e0e6e85732" width="360" height="800">
